@@ -6,24 +6,10 @@ export default defineConfig({
   description: 'document for GPU Mesh',
   base: '/gpu-mesh/',
   themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
-    nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/markdown-examples' }
-    ],
-
-    sidebar: [
-      {
-        text: 'Examples',
-        items: [
-          { text: 'Markdown Examples', link: '/markdown-examples' },
-          { text: 'Runtime API Examples', link: '/api-examples' }
-        ]
-      }
-    ],
-
+    nav: [{ text: 'Home', link: '/' }],
+    sidebar: {},
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
+      { icon: 'github', link: 'https://github.com/ccjr1120/gpu-mesh' }
     ]
   }
 })
