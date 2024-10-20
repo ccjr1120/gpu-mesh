@@ -4,7 +4,6 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: 'GPU Mesh',
   description: 'document for GPU Mesh',
-  base: '/gpu-mesh/',
   themeConfig: {
     nav: [{ text: 'Home', link: '/' }],
     sidebar: {},
