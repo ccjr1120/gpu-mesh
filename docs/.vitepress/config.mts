@@ -11,5 +11,6 @@ export default defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/ccjr1120/gpu-mesh' }
     ]
-  }
+  },
+  vite: {}
 })

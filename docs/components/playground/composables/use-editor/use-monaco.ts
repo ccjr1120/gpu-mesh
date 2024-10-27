@@ -8,8 +8,8 @@ import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 export default function useMonaco(el: HTMLElement) {
   return monaco.editor.create(el, {
     theme: 'vs-dark',
-    value: "function hello() {\n\talert('Hello world!');\n}",
-    language: 'javascript',
+    value: '',
+    language: 'wgsl',
     automaticLayout: true, // 自动调整大小
     lineHeight: 24,
     tabSize: 2

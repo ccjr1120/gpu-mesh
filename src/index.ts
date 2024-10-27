@@ -1,1 +1,4 @@
-console.log('gpu-mesh')
+import Mesh from './Mesh'
+
+const GpuMesh = { Mesh }
+export default GpuMesh
