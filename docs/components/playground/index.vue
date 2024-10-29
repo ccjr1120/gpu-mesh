@@ -14,7 +14,7 @@ const dataMap = ref<DataMap>(DEFAULT_DATA)
 
 const viewRef = useTemplateRef('viewRef')
 const editorRef = useTemplateRef('editorRef')
-const view = useView({ el: viewRef, dataMap })
+useView({ el: viewRef, dataMap })
 const editor = useEditor({ el: editorRef, dataMap })
 </script>
 

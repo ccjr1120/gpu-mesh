@@ -12,5 +12,9 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/ccjr1120/gpu-mesh' }
     ]
   },
-  vite: {}
+  vite: {
+    ssr: {
+      noExternal: ['monaco-editor']
+    }
+  }
 })
