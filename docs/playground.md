@@ -4,6 +4,11 @@ pageClass: custom-page-class
 ---
 
 <script setup>
-import Playground from './components/playground/index.vue'
+import { defineAsyncComponent } from 'vue';
+import { inBrowser } from 'vitepress';
+
+const Play = inBrowser
+  ? defineAsyncComponent(() => import('./components/playground/index.vue'))
+  : () => null;
 </script>
-<Playground/>
+<Play/>
