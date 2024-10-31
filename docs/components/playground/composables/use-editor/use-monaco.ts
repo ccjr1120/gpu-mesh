@@ -11,8 +11,9 @@ export default function useMonaco(el: HTMLElement) {
     value: '',
     language: 'wgsl',
     automaticLayout: true, // 自动调整大小
-    lineHeight: 24,
-    tabSize: 2
+    lineHeight: 32,
+    tabSize: 2,
+    fontSize: 22
   })
 }
 self.MonacoEnvironment = {

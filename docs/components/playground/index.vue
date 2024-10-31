@@ -4,17 +4,17 @@ import useView from './composables/use-view'
 import useEditor from './composables/use-editor/index'
 import vert from './assets/vert.wgsl?raw'
 import frag from './assets/frag.wgsl?raw'
+import { DataMap } from './index'
 
 const DEFAULT_DATA = {
   vertex: vert,
   fragment: frag
 }
-export type DataMap = typeof DEFAULT_DATA
 const dataMap = ref<DataMap>(DEFAULT_DATA)
 
-const viewRef = useTemplateRef('viewRef')
-const editorRef = useTemplateRef('editorRef')
-const view = useView({ el: viewRef, dataMap })
+const viewRef = useTemplateRef<HTMLElement>('viewRef')
+const editorRef = useTemplateRef<HTMLElement>('editorRef')
+useView({ el: viewRef, dataMap })
 const editor = useEditor({ el: editorRef, dataMap })
 </script>
 

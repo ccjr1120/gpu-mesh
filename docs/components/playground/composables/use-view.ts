@@ -1,12 +1,12 @@
 import { onMounted, Ref, ShallowRef, watch } from 'vue'
 import GPUMesh from '../../../../src/index'
-import { DataMap } from '../index.vue'
+import { DataMap } from '../index'
 
 export default function useView({
   el,
   dataMap
 }: {
-  el: ShallowRef<HTMLElement | null>
+  el: Readonly<ShallowRef<HTMLElement | null>>
   dataMap: Ref<DataMap>
 }) {
   watch(

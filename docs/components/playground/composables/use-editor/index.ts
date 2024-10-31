@@ -1,6 +1,6 @@
 import { onMounted, Ref, ref, ShallowRef } from 'vue'
 import useMonaco from './use-monaco'
-import { DataMap } from '../../index.vue'
+import { DataMap } from '../../index'
 
 export default function useEditor({
   el,
