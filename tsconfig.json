@@ -22,7 +22,7 @@
     "noUnusedParameters": true,
     "noPropertyAccessFromIndexSignature": true,
 
-    "types": ["@webgpu/types", "vite/client"],
+    "types": ["node", "@webgpu/types", "vite/client"],
     // build types
     "declaration": true,
     "declarationDir": "./dist/types",

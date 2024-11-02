@@ -1,6 +1,7 @@
-import { onMounted, Ref, ShallowRef, watch } from 'vue'
+import { onMounted, ref, Ref, ShallowRef, watch } from 'vue'
 import GPUMesh from '../../../../src/index'
 import { DataMap } from '../index'
+import { _throttle } from '../utils'
 
 export default function useView({
   el,
@@ -9,16 +10,26 @@ export default function useView({
   el: Readonly<ShallowRef<HTMLElement | null>>
   dataMap: Ref<DataMap>
 }) {
-  watch(
-    dataMap,
-    () => {
-      console.log('dataMap changed')
-    },
-    { deep: true }
-  )
+  const loading = ref(false)
   onMounted(async () => {
-    if (!el.value) return
     await GPUMesh.Mesh.loadDevice()
+    const observer = new ResizeObserver(renderGPUMesh)
+    observer.observe(el.value!)
+    loading.value = true
+  })
+  watch(
+    [dataMap, el, loading],
+    () => {
+      if (!loading.value) return
+      renderGPUMesh()
+    },
+    { deep: true, immediate: true, flush: 'pre' }
+  )
+
+  const WAIT_TIME = 600
+  const renderGPUMesh = _throttle(() => {
+    if (!el.value) return
+    el.value.innerHTML = ''
     new GPUMesh.Mesh(el.value, {
       vertices: new Float32Array([
         -0.8, -0.8, 0.8, -0.8, 0.8, 0.8,
@@ -26,18 +37,9 @@ export default function useView({
         -0.8, -0.8, 0.8, 0.8, -0.8, 0.8
       ]),
       shader: {
-        vertex: `
-        @vertex
-  fn vertexMain(@location(0) pos: vec2f) ->
-    @builtin(position) vec4f {
-    return vec4f(pos, 0, 1);
-  }`,
-        fragment: `
-          @fragment
-  fn fragmentMain() -> @location(0) vec4f {
-    return vec4f(1, 0, 0, 1); // (Red, Green, Blue, Alpha)
-  }`
+        vertex: `${dataMap.value.vertex}`,
+        fragment: `${dataMap.value.fragment}`
       }
     })
-  })
+  }, WAIT_TIME)
 }
