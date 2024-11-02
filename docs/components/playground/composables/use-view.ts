@@ -30,12 +30,10 @@ export default function useView({
   const renderGPUMesh = _throttle(() => {
     if (!el.value) return
     el.value.innerHTML = ''
+    const options = eval(dataMap.value.options)
+    console.log(options)
     new GPUMesh.Mesh(el.value, {
-      vertices: new Float32Array([
-        -0.8, -0.8, 0.8, -0.8, 0.8, 0.8,
-        // Triangle 2
-        -0.8, -0.8, 0.8, 0.8, -0.8, 0.8
-      ]),
+      vertices: options.vertices,
       shader: {
         vertex: `${dataMap.value.vertex}`,
         fragment: `${dataMap.value.fragment}`

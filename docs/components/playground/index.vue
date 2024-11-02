@@ -2,14 +2,9 @@
 import { ref, useTemplateRef } from 'vue'
 import useView from './composables/use-view'
 import useEditor from './composables/use-editor/index'
-import vert from './assets/vert.wgsl?raw'
-import frag from './assets/frag.wgsl?raw'
 import { DataMap } from './index'
+import { DEFAULT_DATA } from './constants'
 
-const DEFAULT_DATA = {
-  vertex: vert,
-  fragment: frag
-}
 const dataMap = ref<DataMap>(DEFAULT_DATA)
 
 const viewRef = useTemplateRef<HTMLElement>('viewRef')

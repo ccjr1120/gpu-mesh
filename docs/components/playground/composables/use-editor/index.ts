@@ -1,6 +1,6 @@
 import { onMounted, Ref, ref, ShallowRef } from 'vue'
 import useMonaco from './use-monaco'
-import { DataMap } from '../../index'
+import { DataMap } from '../..'
 
 export default function useEditor({
   el,
@@ -10,18 +10,31 @@ export default function useEditor({
   dataMap: Ref<DataMap>
 }) {
   const activeDataKey = ref<keyof DataMap>('vertex')
+  const setMonacoValue = () => {
+    const value = dataMap.value[activeDataKey.value]
+    monaco?.editor.setModelLanguage(
+      editor!.getModel()!,
+      activeDataKey.value === 'options' ? 'typescript' : 'wgsl'
+    )
+    editor?.setValue(value)
+  }
+  const setDataMapValue = () => {
+    dataMap.value[activeDataKey.value] = editor?.getValue() || ''
+  }
   const updateActiveDataKey = (key: keyof DataMap) => {
     activeDataKey.value = key
-    monaco?.setValue(dataMap.value[key])
+    setMonacoValue()
   }
-  let monaco: ReturnType<typeof useMonaco> | null = null
+  let monaco: ReturnType<typeof useMonaco>['monaco'] | null = null
+  let editor: ReturnType<typeof useMonaco>['editor'] | null = null
   onMounted(() => {
     if (!el.value) return
-    monaco = useMonaco(el.value)
-    monaco.setValue(dataMap.value[activeDataKey.value])
-    monaco.onDidChangeModelContent(() => {
-      const value = monaco?.getValue() || ''
-      dataMap.value[activeDataKey.value] = value
+    const monacoReturn = useMonaco(el.value)
+    monaco = monacoReturn.monaco
+    editor = monacoReturn.editor
+    setMonacoValue()
+    editor.onDidChangeModelContent(() => {
+      setDataMapValue()
     })
   })
   return { dataMap, activeDataKey, updateActiveDataKey }

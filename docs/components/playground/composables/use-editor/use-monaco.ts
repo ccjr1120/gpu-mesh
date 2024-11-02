@@ -6,15 +6,18 @@ import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
 import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
 
 export default function useMonaco(el: HTMLElement) {
-  return monaco.editor.create(el, {
-    theme: 'vs-dark',
-    value: '',
-    language: 'wgsl',
-    automaticLayout: true, // 自动调整大小
-    lineHeight: 32,
-    tabSize: 2,
-    fontSize: 22
-  })
+  return {
+    monaco: monaco,
+    editor: monaco.editor.create(el, {
+      theme: 'vs-dark',
+      value: '',
+      language: 'wgsl',
+      automaticLayout: true, // 自动调整大小
+      lineHeight: 32,
+      tabSize: 2,
+      fontSize: 22
+    })
+  }
 }
 self.MonacoEnvironment = {
   getWorker(_, label) {
