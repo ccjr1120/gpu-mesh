@@ -31,13 +31,12 @@ export default function useView({
     if (!el.value) return
     el.value.innerHTML = ''
     const options = eval(dataMap.value.options)
+    console.log(dataMap.value)
     console.log(options)
     new GPUMesh.Mesh(el.value, {
-      vertices: options.vertices,
-      shader: {
-        vertex: `${dataMap.value.vertex}`,
-        fragment: `${dataMap.value.fragment}`
-      }
+      vertex: dataMap.value.vertex,
+      fragment: dataMap.value.fragment,
+      options
     })
   }, WAIT_TIME)
 }

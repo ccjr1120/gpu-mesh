@@ -1,4 +1,8 @@
+struct FragInput {
+  @location(0) cell : vec2f,
+};
+
 @fragment
-fn fragmentMain() -> @location(0) vec4f {
-  return vec4f(1, 0, 0, 1);
+fn fragmentMain(input : FragInput) -> @location(0) vec4f {
+  return vec4f(input.cell / grid, 0, 1);
 }

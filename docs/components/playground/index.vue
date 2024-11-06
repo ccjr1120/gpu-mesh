@@ -15,7 +15,9 @@ const editor = useEditor({ el: editorRef, dataMap })
 
 <template>
   <div class="playground">
-    <div ref="viewRef" class="view" />
+    <div class="left-container">
+      <div ref="viewRef" class="view" />
+    </div>
     <div class="right-container">
       <ul class="tab-list">
         <li

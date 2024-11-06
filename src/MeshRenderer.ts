@@ -1,33 +1,40 @@
 export type RenderParams = {
   canvas: HTMLCanvasElement
   device: GPUDevice
-  shader: { vertex: string; fragment: string }
-  vertices: Float32Array
-  instanceCount?: number
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  attributes?: { [key: string]: any }
+  vertex: string
+  fragment: string
+  options: {
+    vertices: Float32Array
+    instanceCount?: number
+    uniform?: {
+      [k: string]: {
+        binding: number
+        group: number
+        value: ArrayBuffer
+      }
+    }
+  }
 }
-
+const withDefaultOptions = (
+  options: RenderParams['options']
+): Required<RenderParams['options']> => {
+  return {
+    ...options,
+    instanceCount: options.instanceCount || 1,
+    uniform: options.uniform || {}
+  }
+}
 export default class MeshRenderer {
   device: GPUDevice
-  shader: RenderParams['shader']
-  vertices: RenderParams['vertices']
-  instanceCount: RenderParams['instanceCount']
-  attributes: RenderParams['attributes']
+  vertex: string
+  fragment: string
+  options: Required<RenderParams['options']>
   canvas: HTMLCanvasElement
   canvasCtx: GPUCanvasContext
-  constructor({
-    shader,
-    vertices,
-    instanceCount,
-    attributes,
-    device,
-    canvas
-  }: RenderParams) {
-    this.shader = shader
-    this.vertices = vertices
-    this.attributes = attributes
-    this.instanceCount = instanceCount || 1
+  constructor({ vertex, fragment, options, device, canvas }: RenderParams) {
+    this.vertex = vertex
+    this.fragment = fragment
+    this.options = withDefaultOptions(options)
     this.canvas = canvas
     this.device = device
     this.canvasCtx = this.setupCanvasContext()
@@ -35,7 +42,7 @@ export default class MeshRenderer {
 
   render() {
     const device = this.device
-    const vertices = this.vertices
+    const vertices = this.options.vertices
     const vertexShaderModule = this.createShaderModule()
     const { vertexBuffer, vertexBufferLayout } = this.createVertexBL()
     device.queue.writeBuffer(vertexBuffer, 0, vertices)
@@ -48,7 +55,7 @@ export default class MeshRenderer {
     this.setupUniform(renderPass, pipeline)
     renderPass.setPipeline(pipeline)
     renderPass.setVertexBuffer(0, vertexBuffer)
-    renderPass.draw(vertices.length / 2, this.instanceCount)
+    renderPass.draw(vertices.length / 2, this.options.instanceCount || 0)
     renderPass.end() // 完成指令队列的记录
     const commandBuffer = encoder.finish() // 结束编码
     this.device.queue.submit([commandBuffer]) // 提交给 GPU 命令队列
@@ -67,7 +74,7 @@ export default class MeshRenderer {
   }
 
   private createVertexBL() {
-    const vertices = this.vertices
+    const vertices = this.options.vertices
     const vertexBuffer = this.device.createBuffer({
       // 标识，字符串随意写，报错时会通过它定位
       label: 'Gpu Mesh',
@@ -119,9 +126,8 @@ export default class MeshRenderer {
     const vertexShaderModule = this.device.createShaderModule({
       label: 'Mesh Shader',
       code: `
-      ${this.shader.vertex}
-
-      ${this.shader.fragment}
+      ${this.vertex}
+      ${this.fragment}
     `
     })
     return vertexShaderModule
@@ -145,28 +151,33 @@ export default class MeshRenderer {
     pass: GPURenderPassEncoder,
     pipeline: GPURenderPipeline
   ) {
-    if (!this.attributes) return
     const device = this.device
-    const bindGroupEntries: GPUBindGroupEntry[] = []
-    for (let i = 0; i < Object.keys(this.attributes).length; i++) {
-      const key = Object.keys(this.attributes)[i]
-      const usage = key.endsWith('Uniform')
-        ? GPUBufferUsage.UNIFORM
-        : GPUBufferUsage.STORAGE
-      const value = this.attributes[key]
-      const buffer = device.createBuffer({
-        label: key,
-        size: value.byteLength,
-        usage: usage | GPUBufferUsage.COPY_DST
-      })
-      device.queue.writeBuffer(buffer, 0, value)
-      bindGroupEntries.push({ binding: i, resource: { buffer } })
-    }
-    const bindGroup = device.createBindGroup({
-      label: `Group`,
-      layout: pipeline.getBindGroupLayout(0),
-      entries: bindGroupEntries
+    const groupMap = Object.groupBy(
+      Object.entries(this.options.uniform).map((item) => ({
+        key: item[0],
+        ...item[1]
+      })),
+      (item) => item.group
+    )
+    Object.entries(groupMap).forEach(([k, v]) => {
+      const bindGroupEntries: GPUBindGroupEntry[] =
+        v?.map((item) => {
+          const buffer = device.createBuffer({
+            label: item.key,
+            size: item.value.byteLength,
+            usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
+          })
+          device.queue.writeBuffer(buffer, 0, item.value)
+          return { binding: item.binding, resource: { buffer } }
+        }) || []
+      if (bindGroupEntries.length > 0) {
+        const bindGroup = device.createBindGroup({
+          label: `Group`,
+          layout: pipeline.getBindGroupLayout(+k),
+          entries: bindGroupEntries
+        })
+        pass.setBindGroup(+k, bindGroup)
+      }
     })
-    pass.setBindGroup(0, bindGroup)
   }
 }
