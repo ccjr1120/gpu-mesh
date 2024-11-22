@@ -62,11 +62,11 @@ const editor = useEditor({ el: editorRef, dataMap })
     li {
       cursor: pointer;
       height: 32px;
-      background-color: #141414;
+      background-color: #1e1e1e;
       line-height: 32px;
       padding: 0px 10px;
       &.active {
-        background-color: #1e1e1e;
+        background-color: #000;
       }
     }
   }
