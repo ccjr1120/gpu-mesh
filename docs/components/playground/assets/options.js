@@ -43,7 +43,7 @@
   const normalVertices = normalizeArrayToCenterRange(vertices)
   console.log(normalVertices)
   return {
-    instanceCount: 1,
+    instanceCount: 22 * 12,
     vertices: normalVertices
   }
 })()
