@@ -30,5 +30,5 @@
     "sourceMap": false
   },
   "include": ["src", "docs"],
-  "exclude": ["**/dist", "**/out"]
+  "exclude": ["**/dist", "**/out", "**/assets", "**/meshes"]
 }

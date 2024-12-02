@@ -3,15 +3,17 @@ layout: home
 
 hero:
   name: 'GPU Mesh'
-  tagline: 无需关心渲染流程，即可使用WebGPU进行渲染
+  tagline: 原生的渲染语法，快捷的渲染体验
   actions:
     - theme: brand
       text: Playground
       link: /playground
     - theme: alt
-      text: API Docs
-      link: /api
-features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+      text: Guide
+      link: /guide
 ---
+
+<script setup>
+import ExampleBanner from './examples/components/banner.vue'
+</script>
+<ExampleBanner />
