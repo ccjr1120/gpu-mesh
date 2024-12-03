@@ -70,6 +70,7 @@ export default defineConfig({
     define: {
       __MESHES: JSON.stringify(loadExampleMeshes())
     },
+    plugins: [],
     ssr: {
       noExternal: ['monaco-editor']
     }

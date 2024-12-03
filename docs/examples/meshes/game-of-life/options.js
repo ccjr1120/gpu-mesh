@@ -42,10 +42,7 @@
   const vertices = generateHeartVertices()
   const normalVertices = normalizeArrayToCenterRange(vertices)
   return {
-    instanceCount: 1,
-    vertices: normalVertices,
-    primitive: {
-      topology: 'point-list'
-    }
+    instanceCount: 22 * 12,
+    vertices: normalVertices
   }
 })()
