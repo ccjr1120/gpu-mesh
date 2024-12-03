@@ -41,7 +41,6 @@
   }
   const vertices = generateHeartVertices()
   const normalVertices = normalizeArrayToCenterRange(vertices)
-  console.log(normalVertices)
   return {
     instanceCount: 22 * 12,
     vertices: normalVertices
