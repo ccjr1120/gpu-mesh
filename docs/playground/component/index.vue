@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { onMounted, ref, useTemplateRef, watch } from 'vue'
-import useView from './composables/use-view'
 import useEditor from './composables/use-editor/index'
 import { DataMap } from './index'
 import { DEFAULT_DATA } from './constants'
+import useView from './composables/use-view'
 
 const LOCAL_STORAGE_KEY = 'gpu-mesh-data'
 const dataMap = ref<DataMap>(DEFAULT_DATA)

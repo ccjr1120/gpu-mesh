@@ -13,6 +13,7 @@ export type RenderParams = {
         value: ArrayBuffer
       }
     }
+    primitive?: GPUPrimitiveState
   }
 }
 const withDefaultOptions = (
@@ -21,7 +22,10 @@ const withDefaultOptions = (
   return {
     ...options,
     instanceCount: options.instanceCount || 1,
-    uniform: options.uniform || {}
+    uniform: options.uniform || {},
+    primitive: options.primitive || {
+      topology: 'triangle-list'
+    }
   }
 }
 export default class MeshRenderer {
@@ -117,7 +121,8 @@ export default class MeshRenderer {
             format: navigator.gpu.getPreferredCanvasFormat() // 输出到 canvas 画布上
           }
         ]
-      }
+      },
+      primitive: this.options.primitive
     })
     return pipeline
   }

@@ -73,6 +73,7 @@ li {
     position: absolute;
     top: 50%;
     left: 50%;
+    white-space: nowrap;
     transform: translate(-50%, -50%);
   }
 }

@@ -1,7 +1,7 @@
-import { _throttle } from './../utils'
 import { onMounted, ref, Ref, ShallowRef, watch } from 'vue'
 import GPUMesh from '../../../../src/index'
 import { DataMap } from '../index'
+import { _throttle } from '../../../utils/_'
 
 export default function useView({
   el,

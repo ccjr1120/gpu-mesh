@@ -1,5 +1,5 @@
-import vert from './assets/vert.wgsl?raw'
-import frag from './assets/frag.wgsl?raw'
+import vert from './assets/vertex.wgsl?raw'
+import frag from './assets/fragment.wgsl?raw'
 import options from './assets/options.js?raw'
 
 export const DEFAULT_DATA = {

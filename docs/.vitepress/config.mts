@@ -1,11 +1,12 @@
 import { DefaultTheme, defineConfig } from 'vitepress'
 import fs from 'fs'
 import path from 'path'
+import { _kebabCaseToDisplayName } from '../utils/_.ts'
 
 // 加载示例中的所有meshes
 export function loadExampleMeshes() {
   // 获取所有文件夹
-  const exampleDir = path.resolve(__dirname, '../examples/components/meshes')
+  const exampleDir = path.resolve(__dirname, '../examples/meshes')
   const exampleFolders = fs.readdirSync(exampleDir)
   // 遍历每个文件夹, 得到options,vertex,fragment
   return exampleFolders.reduce((pre, folder) => {
@@ -15,11 +16,11 @@ export function loadExampleMeshes() {
         'utf-8'
       ),
       vertex: fs.readFileSync(
-        path.resolve(exampleDir, folder, 'vert.wgsl'),
+        path.resolve(exampleDir, folder, 'vertex.wgsl'),
         'utf-8'
       ),
       fragment: fs.readFileSync(
-        path.resolve(exampleDir, folder, 'frag.wgsl'),
+        path.resolve(exampleDir, folder, 'fragment.wgsl'),
         'utf-8'
       )
     }
@@ -31,13 +32,18 @@ function transformSidebar(dir: string) {
   const fullPath = path.resolve(__dirname, dir)
   const files = fs.readdirSync(fullPath)
   const sidebarKey = fullPath.split('/').pop()!
-  const items = files.map((file) => {
-    if (file === 'index.md') {
-      return { text: 'Getting Started', link: `/${sidebarKey}/` }
-    }
-    const fileName = file.replace('.md', '')
-    return { text: fileName, link: `/${sidebarKey}/${fileName}` }
-  })
+  const items = files
+    .map((file) => {
+      if (file === 'index.md') {
+        return { text: 'Getting Started', link: `/${sidebarKey}/` }
+      }
+      const fileName = file.replace('.md', '')
+      return {
+        text: _kebabCaseToDisplayName(fileName),
+        link: `/${sidebarKey}/${fileName}`
+      }
+    })
+    .sort((a) => (a.text === 'Getting Started' ? -1 : 1))
   return {
     [sidebarKey]: {
       text: sidebarKey,
