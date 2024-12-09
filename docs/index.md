@@ -3,7 +3,7 @@ layout: home
 
 hero:
   name: 'GPU Mesh'
-  tagline: 原生的渲染语法，快捷的渲染体验
+  tagline: 写，然后收获
   actions:
     - theme: brand
       text: Playground

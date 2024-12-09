@@ -5,8 +5,9 @@ export type RenderParams = {
   fragment: string
   options: {
     vertices: Float32Array
+    clearColor?: [number, number, number, number]
     instanceCount?: number
-    uniform?: {
+    uniforms?: {
       [k: string]: {
         binding: number
         group: number
@@ -22,7 +23,8 @@ const withDefaultOptions = (
   return {
     ...options,
     instanceCount: options.instanceCount || 1,
-    uniform: options.uniform || {},
+    uniforms: options.uniforms || {},
+    clearColor: [0, 0, 0, 1],
     primitive: options.primitive || {
       topology: 'triangle-list'
     }
@@ -144,7 +146,12 @@ export default class MeshRenderer {
         {
           view: this.canvasCtx.getCurrentTexture().createView(),
           loadOp: 'clear',
-          clearValue: { r: 0, g: 0, b: 0.4, a: 0 },
+          clearValue: {
+            r: this.options.clearColor[0],
+            g: this.options.clearColor[1],
+            b: this.options.clearColor[2],
+            a: this.options.clearColor[3]
+          },
           storeOp: 'store'
         }
       ]
@@ -158,7 +165,7 @@ export default class MeshRenderer {
   ) {
     const device = this.device
     const groupMap = Object.groupBy(
-      Object.entries(this.options.uniform).map((item) => ({
+      Object.entries(this.options.uniforms).map((item) => ({
         key: item[0],
         ...item[1]
       })),

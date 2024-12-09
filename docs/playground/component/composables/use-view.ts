@@ -40,10 +40,17 @@ export default function useView({
       fragment: dataMap.value.fragment,
       options
     })
-    if (options.timeout && timer == null) {
+    if (options.animation && timer == null) {
+      const timeout = options.animationTime || 1000
       timer = setInterval(() => {
-        _renderGPUMesh()
-      }, options.timeout)
+        el.value!.innerHTML = ''
+        const aniOptions = options.animation()
+        new GPUMesh.Mesh(el.value!, {
+          vertex: dataMap.value.vertex,
+          fragment: dataMap.value.fragment,
+          options: aniOptions
+        })
+      }, timeout)
     }
   }
   const WAIT_TIME = 600
