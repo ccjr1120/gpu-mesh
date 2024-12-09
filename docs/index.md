@@ -3,7 +3,7 @@ layout: home
 
 hero:
   name: 'GPU Mesh'
-  tagline: 写，然后收获
+  tagline: 'WebGPU Playground'
   actions:
     - theme: brand
       text: Playground
