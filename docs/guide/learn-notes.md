@@ -51,3 +51,12 @@ fn fragmentMain() -> @location(0) vec4f {
 - 如果`createRenderPipeline`中设置`layout:'auto'`,那么你的uniform或者storage等需要在shader中使用，否则会报`Bind group layout index (0) doesn't correspond to a bind group for this pipeline`。
   - 我其实还不确定是不是`layout:'auto'`的原因，只是因为目前我还没有自定义过layout，但是我觉得不使用所以没办法自动声明对应的`group layout`是很合理的事情。
   - 不管上面结果如何，这个问题是切实存在的
+
+## 缓冲区
+
+GPU 很可能会对 uniform 缓冲区进行特殊处理，以使它们的更新和读取速度比存储缓冲区更快，因此对于可能会频繁更新且数量较少的数据（例如模型、视图和投影矩阵），uniform 通常是一种更安全的选择，可以实现更好的性能。
+
+- uniform缓冲区
+  - uniform 缓冲区的大小有限，无法支持动态大小的数组（您必须在着色器中指定数组大小），并且无法由计算着色器写入。
+- 存储缓冲区
+  - 存储缓冲区是通用缓冲区，可以在计算着色器中读取和写入，并在顶点着色器中读取。它们可能非常大，并且不需要在着色器中声明特定大小，因此它们更类似于常规内存。

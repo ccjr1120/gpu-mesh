@@ -67,6 +67,8 @@ export default class MeshRenderer {
     this.device.queue.submit([commandBuffer]) // 提交给 GPU 命令队列
   }
 
+  nextUpdateBuffer = () => {}
+
   private setupCanvasContext() {
     const ctx = this.canvas.getContext('webgpu')
     if (!ctx) throw new Error('WebGPU not supported')

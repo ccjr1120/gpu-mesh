@@ -15,6 +15,9 @@ watch(
   { deep: true }
 )
 onMounted(() => {
+  if (import.meta.env.MODE === 'development') {
+    return
+  }
   const storageData = localStorage.getItem(LOCAL_STORAGE_KEY)
   if (storageData) {
     dataMap.value = JSON.parse(storageData)
